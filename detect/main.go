@@ -20,7 +20,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/detect"
+	"github.com/cloudfoundry/procfile-buildpack/procfile"
 )
 
 func main() {
@@ -39,5 +41,23 @@ func main() {
 }
 
 func d(detect detect.Detect) (int, error) {
-	return detect.Fail(), nil
+	p, ok, err := procfile.ParseProcfile(detect.Application, detect.Logger)
+	if err != nil {
+		return detect.Error(102), err
+	}
+
+	if !ok {
+		return detect.Fail(), nil
+	}
+
+	bp := detect.BuildPlan[procfile.Dependency]
+	if bp.Metadata == nil {
+		bp.Metadata = make(buildplan.Metadata)
+	}
+
+	for t, c := range p {
+		bp.Metadata[t] = c
+	}
+
+	return detect.Pass(buildplan.BuildPlan{procfile.Dependency: bp})
 }

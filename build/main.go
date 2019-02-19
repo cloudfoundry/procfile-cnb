@@ -22,6 +22,7 @@ import (
 
 	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/build"
+	"github.com/cloudfoundry/procfile-buildpack/procfile"
 )
 
 func main() {
@@ -40,5 +41,13 @@ func main() {
 }
 
 func b(build build.Build) (int, error) {
+	build.Logger.FirstLine(build.Logger.PrettyIdentity(build.Buildpack))
+
+	if p, ok := procfile.NewProcfile(build); ok {
+		if err := p.Contribute(); err != nil {
+			return build.Failure(103), err
+		}
+	}
+
 	return build.Success(buildplan.BuildPlan{})
 }
