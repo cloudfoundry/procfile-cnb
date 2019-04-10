@@ -8,10 +8,10 @@ image_resource:
     tag: latest
 
 inputs:
-- name: procfile-buildpack
+- name: procfile-cnb
 
 caches:
 - path: go-module-cache
 
 run:
-  path: procfile-buildpack/ci/unit-test.sh
+  path: procfile-cnb/ci/unit-test.sh

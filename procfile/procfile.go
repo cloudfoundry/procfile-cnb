@@ -53,7 +53,7 @@ func (p Procfile) Contribute() error {
 		})
 	}
 
-	return p.layers.WriteMetadata(layers.Metadata{Processes: processes})
+	return p.layers.WriteApplicationMetadata(layers.Metadata{Processes: processes})
 }
 
 // String makes Procfile satisfy the Stringer interface.

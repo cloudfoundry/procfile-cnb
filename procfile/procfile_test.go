@@ -23,7 +23,7 @@ import (
 	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/layers"
 	"github.com/cloudfoundry/libcfbuildpack/test"
-	"github.com/cloudfoundry/procfile-buildpack/procfile"
+	"github.com/cloudfoundry/procfile-cnb/procfile"
 	. "github.com/onsi/gomega"
 	"github.com/sclevine/spec"
 	"github.com/sclevine/spec/report"
@@ -91,7 +91,7 @@ func TestProcfile(t *testing.T) {
 
 			g.Expect(p.Contribute()).To(Succeed())
 
-			g.Expect(f.Build.Layers).To(test.HaveLaunchMetadata(layers.Metadata{
+			g.Expect(f.Build.Layers).To(test.HaveApplicationMetadata(layers.Metadata{
 				Processes: []layers.Process{
 					{"test-type-1", "test-command-1"},
 					{"test-type-2", "test-command-2"},

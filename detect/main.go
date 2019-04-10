@@ -22,7 +22,7 @@ import (
 
 	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/detect"
-	"github.com/cloudfoundry/procfile-buildpack/procfile"
+	"github.com/cloudfoundry/procfile-cnb/procfile"
 )
 
 func main() {

@@ -1,5 +1,5 @@
-# `procfile-buildpack`
-The Cloud Foundry Debug Buildpack is a Cloud Native Buildpack V3 that enables the use of a procfile to declare process types.
+# `procfile-cnb`
+The Cloud Foundry Procfile Buildpack is a Cloud Native Buildpack V3 that enables the use of a procfile to declare process types.
 
 ## Detection
 The detection phase passes if
