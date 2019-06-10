@@ -18,7 +18,6 @@ package procfile
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -54,11 +53,6 @@ func (p Procfile) Contribute() error {
 	}
 
 	return p.layers.WriteApplicationMetadata(layers.Metadata{Processes: processes})
-}
-
-// String makes Procfile satisfy the Stringer interface.
-func (p Procfile) String() string {
-	return fmt.Sprintf("Procfile{ layers: %s, logger: %s, processes: %s }", p.layers, p.logger, p.processes)
 }
 
 // NewProcfile creates a new Procfile instance.  OK is true if the build plan contains "procfile" dependency.
