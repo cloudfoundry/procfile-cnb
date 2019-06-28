@@ -42,7 +42,7 @@ func main() {
 
 func b(build build.Build) (int, error) {
 	if p, ok := procfile.NewProcfile(build); ok {
-		build.Logger.FirstLine(build.Logger.PrettyIdentity(build.Buildpack))
+		build.Logger.Title(build.Buildpack)
 
 		if err := p.Contribute(); err != nil {
 			return build.Failure(103), err

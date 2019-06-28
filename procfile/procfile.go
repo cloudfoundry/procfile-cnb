@@ -42,7 +42,7 @@ type Procfile struct {
 
 // Contribute makes the contribution to launch
 func (p Procfile) Contribute() error {
-	p.logger.FirstLine("Contributing Procfile process types")
+	p.logger.Body("Contributing Procfile process types")
 
 	var processes []layers.Process
 	for t, c := range p.processes {
