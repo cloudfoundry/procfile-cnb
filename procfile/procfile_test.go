@@ -24,7 +24,7 @@ import (
 	"github.com/cloudfoundry/libcfbuildpack/layers"
 	"github.com/cloudfoundry/libcfbuildpack/test"
 	"github.com/cloudfoundry/procfile-cnb/procfile"
-	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega"
 	"github.com/sclevine/spec"
 	"github.com/sclevine/spec/report"
 )
@@ -32,7 +32,7 @@ import (
 func TestProcfile(t *testing.T) {
 	spec.Run(t, "Procfile", func(t *testing.T, when spec.G, it spec.S) {
 
-		g := NewGomegaWithT(t)
+		g := gomega.NewWithT(t)
 
 		var f *test.BuildFactory
 
@@ -44,14 +44,14 @@ func TestProcfile(t *testing.T) {
 
 			it("returns false when no procfile", func() {
 				_, ok := procfile.NewProcfile(f.Build)
-				g.Expect(ok).To(BeFalse())
+				g.Expect(ok).To(gomega.BeFalse())
 			})
 
 			it("returns true when procfile exists", func() {
 				f.AddBuildPlan(procfile.Dependency, buildplan.Dependency{})
 
 				_, ok := procfile.NewProcfile(f.Build)
-				g.Expect(ok).To(BeTrue())
+				g.Expect(ok).To(gomega.BeTrue())
 			})
 		})
 
@@ -65,17 +65,17 @@ func TestProcfile(t *testing.T) {
 
 			it("returns false when no Procfile", func() {
 				_, ok, err := procfile.ParseProcfile(f.Detect.Application, f.Detect.Logger)
-				g.Expect(err).NotTo(HaveOccurred())
-				g.Expect(ok).To(BeFalse())
+				g.Expect(err).NotTo(gomega.HaveOccurred())
+				g.Expect(ok).To(gomega.BeFalse())
 			})
 
 			it("returns true when Procfile exists", func() {
 				test.WriteFile(t, filepath.Join(f.Detect.Application.Root, "Procfile"), "test-type: test-command")
 
 				p, ok, err := procfile.ParseProcfile(f.Detect.Application, f.Detect.Logger)
-				g.Expect(err).NotTo(HaveOccurred())
-				g.Expect(ok).To(BeTrue())
-				g.Expect(p).To(Equal(map[string]string{"test-type": "test-command"}))
+				g.Expect(err).NotTo(gomega.HaveOccurred())
+				g.Expect(ok).To(gomega.BeTrue())
+				g.Expect(p).To(gomega.Equal(map[string]string{"test-type": "test-command"}))
 			})
 		})
 
@@ -89,7 +89,7 @@ func TestProcfile(t *testing.T) {
 
 			p, _ := procfile.NewProcfile(f.Build)
 
-			g.Expect(p.Contribute()).To(Succeed())
+			g.Expect(p.Contribute()).To(gomega.Succeed())
 
 			g.Expect(f.Build.Layers).To(test.HaveApplicationMetadata(layers.Metadata{
 				Processes: []layers.Process{

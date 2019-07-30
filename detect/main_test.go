@@ -24,7 +24,7 @@ import (
 	"github.com/buildpack/libbuildpack/detect"
 	"github.com/cloudfoundry/libcfbuildpack/test"
 	"github.com/cloudfoundry/procfile-cnb/procfile"
-	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega"
 	"github.com/sclevine/spec"
 	"github.com/sclevine/spec/report"
 )
@@ -32,7 +32,7 @@ import (
 func TestDetect(t *testing.T) {
 	spec.Run(t, "Detect", func(t *testing.T, _ spec.G, it spec.S) {
 
-		g := NewGomegaWithT(t)
+		g := gomega.NewWithT(t)
 
 		var f *test.DetectFactory
 
@@ -41,7 +41,7 @@ func TestDetect(t *testing.T) {
 		})
 
 		it("fails without Procfile", func() {
-			g.Expect(d(f.Detect)).To(Equal(detect.FailStatusCode))
+			g.Expect(d(f.Detect)).To(gomega.Equal(detect.FailStatusCode))
 		})
 
 		it("passes with Procfile", func() {
@@ -49,8 +49,8 @@ func TestDetect(t *testing.T) {
 test-type-2: test-command-2
 `)
 
-			g.Expect(d(f.Detect)).To(Equal(detect.PassStatusCode))
-			g.Expect(f.Output).To(Equal(buildplan.BuildPlan{
+			g.Expect(d(f.Detect)).To(gomega.Equal(detect.PassStatusCode))
+			g.Expect(f.Output).To(gomega.Equal(buildplan.BuildPlan{
 				procfile.Dependency: buildplan.Dependency{
 					Metadata: buildplan.Metadata{
 						"test-type-1": "test-command-1",
