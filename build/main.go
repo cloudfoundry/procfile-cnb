@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/build"
 	"github.com/cloudfoundry/procfile-cnb/procfile"
 )
@@ -41,7 +40,9 @@ func main() {
 }
 
 func b(build build.Build) (int, error) {
-	if p, ok := procfile.NewProcfile(build); ok {
+	if p, ok, err := procfile.NewProcfile(build); err != nil {
+		return build.Failure(102), err
+	} else if ok {
 		build.Logger.Title(build.Buildpack)
 
 		if err := p.Contribute(); err != nil {
@@ -49,5 +50,5 @@ func b(build build.Build) (int, error) {
 		}
 	}
 
-	return build.Success(buildplan.BuildPlan{})
+	return build.Success()
 }

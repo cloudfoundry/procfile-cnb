@@ -50,14 +50,15 @@ func d(detect detect.Detect) (int, error) {
 		return detect.Fail(), nil
 	}
 
-	bp := detect.BuildPlan[procfile.Dependency]
-	if bp.Metadata == nil {
-		bp.Metadata = make(buildplan.Metadata)
-	}
-
+	r := buildplan.Required{Name: procfile.Dependency, Metadata: buildplan.Metadata{}}
 	for t, c := range p {
-		bp.Metadata[t] = c
+		r.Metadata[t] = c
 	}
 
-	return detect.Pass(buildplan.BuildPlan{procfile.Dependency: bp})
+	return detect.Pass(buildplan.Plan{
+		Provides: []buildplan.Provided{
+			{Name: procfile.Dependency},
+		},
+		Requires: []buildplan.Required{r},
+	})
 }

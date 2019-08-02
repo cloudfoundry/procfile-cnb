@@ -56,10 +56,12 @@ func (p Procfile) Contribute() error {
 }
 
 // NewProcfile creates a new Procfile instance.  OK is true if the build plan contains "procfile" dependency.
-func NewProcfile(build build.Build) (Procfile, bool) {
-	p, ok := build.BuildPlan[Dependency]
-	if !ok {
-		return Procfile{}, false
+func NewProcfile(build build.Build) (Procfile, bool, error) {
+	p, ok, err := build.Plans.GetShallowMerged(Dependency)
+	if err != nil {
+		return Procfile{}, false, err
+	} else if !ok {
+		return Procfile{}, false, nil
 	}
 
 	processes := make(map[string]string)
@@ -77,7 +79,7 @@ func NewProcfile(build build.Build) (Procfile, bool) {
 		build.Layers,
 		build.Logger,
 		processes,
-	}, true
+	}, true, nil
 }
 
 // ParseProcfile returns the contents of a procfile and true if the application contains a Procfile file, otherwise
