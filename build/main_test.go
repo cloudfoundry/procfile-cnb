@@ -53,7 +53,6 @@ func TestBuild(t *testing.T) {
 			})
 
 			g.Expect(b(f.Build)).To(gomega.Equal(build.SuccessStatusCode))
-
 			g.Expect(f.Plans).To(gomega.Equal(buildpackplan.Plans{
 				Entries: []buildpackplan.Plan{
 					{
