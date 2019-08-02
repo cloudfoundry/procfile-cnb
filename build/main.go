@@ -21,6 +21,7 @@ import (
 	"os"
 
 	"github.com/cloudfoundry/libcfbuildpack/build"
+	"github.com/cloudfoundry/libcfbuildpack/buildpackplan"
 	"github.com/cloudfoundry/procfile-cnb/procfile"
 )
 
@@ -40,6 +41,8 @@ func main() {
 }
 
 func b(build build.Build) (int, error) {
+	var ps []buildpackplan.Plan
+
 	if p, ok, err := procfile.NewProcfile(build); err != nil {
 		return build.Failure(102), err
 	} else if ok {
@@ -48,7 +51,9 @@ func b(build build.Build) (int, error) {
 		if err := p.Contribute(); err != nil {
 			return build.Failure(103), err
 		}
+
+		ps = append(ps, p.Plan)
 	}
 
-	return build.Success()
+	return build.Success(ps...)
 }

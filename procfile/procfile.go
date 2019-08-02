@@ -24,6 +24,7 @@ import (
 
 	"github.com/buildpack/libbuildpack/application"
 	"github.com/cloudfoundry/libcfbuildpack/build"
+	"github.com/cloudfoundry/libcfbuildpack/buildpackplan"
 	"github.com/cloudfoundry/libcfbuildpack/helper"
 	"github.com/cloudfoundry/libcfbuildpack/layers"
 	"github.com/cloudfoundry/libcfbuildpack/logger"
@@ -34,7 +35,11 @@ const Dependency = "procfile"
 
 var pattern = regexp.MustCompile("^([A-Za-z0-9_-]+):\\s*(.+)$")
 
+// Procfile represents the contents of a Procfile.
 type Procfile struct {
+	// Plan contains the process types and commands.
+	Plan buildpackplan.Plan
+
 	layers    layers.Layers
 	logger    logger.Logger
 	processes map[string]string
@@ -76,6 +81,7 @@ func NewProcfile(build build.Build) (Procfile, bool, error) {
 	}
 
 	return Procfile{
+		p,
 		build.Layers,
 		build.Logger,
 		processes,

@@ -19,8 +19,10 @@ package main
 import (
 	"testing"
 
+	"github.com/buildpack/libbuildpack/buildpackplan"
 	"github.com/cloudfoundry/libcfbuildpack/build"
 	"github.com/cloudfoundry/libcfbuildpack/test"
+	"github.com/cloudfoundry/procfile-cnb/procfile"
 	"github.com/onsi/gomega"
 	"github.com/sclevine/spec"
 	"github.com/sclevine/spec/report"
@@ -31,10 +33,38 @@ func TestBuild(t *testing.T) {
 
 		g := gomega.NewWithT(t)
 
+		var f *test.BuildFactory
+
+		it.Before(func() {
+			f = test.NewBuildFactory(t)
+		})
+
 		it("always passes", func() {
-			f := test.NewBuildFactory(t)
+			g.Expect(b(f.Build)).To(gomega.Equal(build.SuccessStatusCode))
+		})
+
+		it("contributes to build plan", func() {
+			f.AddPlan(buildpackplan.Plan{
+				Name: procfile.Dependency,
+				Metadata: buildpackplan.Metadata{
+					"test-type-1": "test-command-1",
+					"test-type-2": "test-command-2",
+				},
+			})
 
 			g.Expect(b(f.Build)).To(gomega.Equal(build.SuccessStatusCode))
+
+			g.Expect(f.Plans).To(gomega.Equal(buildpackplan.Plans{
+				Entries: []buildpackplan.Plan{
+					{
+						Name: procfile.Dependency,
+						Metadata: buildpackplan.Metadata{
+							"test-type-1": "test-command-1",
+							"test-type-2": "test-command-2",
+						},
+					},
+				},
+			}))
 		})
 	}, spec.Report(report.Terminal{}))
 }
