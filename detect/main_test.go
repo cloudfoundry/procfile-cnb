@@ -50,11 +50,19 @@ test-type-2: test-command-2
 `)
 
 			g.Expect(d(f.Detect)).To(gomega.Equal(detect.PassStatusCode))
-			g.Expect(f.Output).To(gomega.Equal(buildplan.BuildPlan{
-				procfile.Dependency: buildplan.Dependency{
-					Metadata: buildplan.Metadata{
-						"test-type-1": "test-command-1",
-						"test-type-2": "test-command-2",
+			g.Expect(f.Plans).To(gomega.Equal(buildplan.Plans{
+				Plan: buildplan.Plan{
+					Provides: []buildplan.Provided{
+						{Name: procfile.Dependency},
+					},
+					Requires: []buildplan.Required{
+						{
+							Name: procfile.Dependency,
+							Metadata: buildplan.Metadata{
+								"test-type-1": "test-command-1",
+								"test-type-2": "test-command-2",
+							},
+						},
 					},
 				},
 			}))

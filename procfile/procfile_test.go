@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/buildpack/libbuildpack/buildplan"
+	"github.com/cloudfoundry/libcfbuildpack/buildpackplan"
 	"github.com/cloudfoundry/libcfbuildpack/layers"
 	"github.com/cloudfoundry/libcfbuildpack/test"
 	"github.com/cloudfoundry/procfile-cnb/procfile"
@@ -43,14 +43,17 @@ func TestProcfile(t *testing.T) {
 		when("NewProcfile", func() {
 
 			it("returns false when no procfile", func() {
-				_, ok := procfile.NewProcfile(f.Build)
+				_, ok, err := procfile.NewProcfile(f.Build)
+				g.Expect(err).NotTo(gomega.HaveOccurred())
 				g.Expect(ok).To(gomega.BeFalse())
 			})
 
 			it("returns true when procfile exists", func() {
-				f.AddBuildPlan(procfile.Dependency, buildplan.Dependency{})
+				f.AddPlan(buildpackplan.Plan{Name: procfile.Dependency})
 
-				_, ok := procfile.NewProcfile(f.Build)
+				_, ok, err := procfile.NewProcfile(f.Build)
+
+				g.Expect(err).NotTo(gomega.HaveOccurred())
 				g.Expect(ok).To(gomega.BeTrue())
 			})
 		})
@@ -80,14 +83,16 @@ func TestProcfile(t *testing.T) {
 		})
 
 		it("contributes command", func() {
-			f.AddBuildPlan(procfile.Dependency, buildplan.Dependency{
-				Metadata: buildplan.Metadata{
+			f.AddPlan(buildpackplan.Plan{
+				Name: procfile.Dependency,
+				Metadata: buildpackplan.Metadata{
 					"test-type-1": "test-command-1",
 					"test-type-2": "test-command-2",
 				},
 			})
 
-			p, _ := procfile.NewProcfile(f.Build)
+			p, _, err := procfile.NewProcfile(f.Build)
+			g.Expect(err).NotTo(gomega.HaveOccurred())
 
 			g.Expect(p.Contribute()).To(gomega.Succeed())
 
