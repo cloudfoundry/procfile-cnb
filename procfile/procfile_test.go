@@ -98,8 +98,8 @@ func TestProcfile(t *testing.T) {
 
 			g.Expect(f.Build.Layers).To(test.HaveApplicationMetadata(layers.Metadata{
 				Processes: []layers.Process{
-					{"test-type-1", "test-command-1"},
-					{"test-type-2", "test-command-2"},
+					{Type: "test-type-1", Command: "test-command-1"},
+					{Type: "test-type-2", Command: "test-command-2"},
 				},
 			}))
 		})
