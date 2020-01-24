@@ -19,9 +19,9 @@ package main
 import (
 	"testing"
 
-	"github.com/buildpack/libbuildpack/buildpackplan"
-	"github.com/cloudfoundry/libcfbuildpack/build"
-	"github.com/cloudfoundry/libcfbuildpack/test"
+	"github.com/buildpacks/libbuildpack/v2/buildpackplan"
+	"github.com/cloudfoundry/libcfbuildpack/v2/build"
+	"github.com/cloudfoundry/libcfbuildpack/v2/test"
 	"github.com/cloudfoundry/procfile-cnb/procfile"
 	"github.com/onsi/gomega"
 	"github.com/sclevine/spec"

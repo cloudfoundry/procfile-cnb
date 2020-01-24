@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cloudfoundry/libcfbuildpack/build"
-	"github.com/cloudfoundry/libcfbuildpack/buildpackplan"
+	"github.com/cloudfoundry/libcfbuildpack/v2/build"
+	"github.com/cloudfoundry/libcfbuildpack/v2/buildpackplan"
 	"github.com/cloudfoundry/procfile-cnb/procfile"
 )
 
